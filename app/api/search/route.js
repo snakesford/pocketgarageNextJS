@@ -21,6 +21,42 @@ export async function GET(req) {
 }
 
 
+// Multi-search 
+// Using smaller dataset - cars_converted.json
+// Search:
+// acura ra 20 a a a a a 
+// Results:
+// Acura Integra (2025)
+// Acura Integra (2025)
+// Acura Integra A-Spec (2025)
+// Acura Integra A-Spec (2025)
+// Acura MDX AWD (2025)
+// Acura MDX AWD Type-S (2025)
+// Acura MDX FWD (2025)
+// Acura RDX AWD (2025)
+// Acura RDX AWD A-SPEC (2025)
+// Acura TLX AWD A-SPEC (2025)
+// Acura TLX FWD (2025)
+// Acura TLX Type-S (2025)
+
+// export async function GET(req) {
+//     const { searchParams } = new URL(req.url);
+//     const query = searchParams.get("q")?.toLowerCase();
+
+//     const terms = query.split(/\s+/);
+//     const results = cars_converted.filter((car) => {
+
+//         return terms.every(term =>
+//             car.make?.toLowerCase().includes(term) ||
+//             car.model?.toLowerCase().includes(term) ||
+//             String(car.year || "").includes(term) ||
+//             car.type?.toLowerCase().includes(term) ||
+//             car.fuel?.toLowerCase().includes(term) ||
+//             car.transmission?.toLowerCase().includes(term)
+//         );
+//     });
+//     return NextResponse.json(results);
+// }
 
 
 
