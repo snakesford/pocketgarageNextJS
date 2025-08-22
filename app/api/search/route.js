@@ -1,21 +1,65 @@
 import { NextResponse } from "next/server";
-import { cars } from "@/data/cars";
+import cars_converted from "@/data/cars_converted.json";
+
+// import { cars } from "@/data/cars";
+/*
+"year":2025,
+    "make":"Acura",
+    "model":"Integra",
+    "atvType":null,
+    "baseModel":"Integra",
+    "VClass":"Large Cars",
+    "cylinders":4.0,
+    "displ":1.5,
+    "drive":"Front-Wheel Drive",
+    "fuelType":"Premium",
+    "phevBlended":false,
+    "range":0,
+    "trany":"Automatic (AV-S7)",
+    "UCity":39.4,
+    "UCityA":0.0,
+    "UHighway":54.8,
+    "fuelType2":null,
+    "rangeA":null,
+    "evMotor":null
+    */
 
 
 export async function GET(req) {
     const { searchParams } = new URL(req.url);
-    const query = searchParams.get("q")?.trim().toLowerCase();
+    const query = searchParams.get("q")?.toLowerCase();
 
-    const results = cars.filter((car) => {
+    const results = cars_converted.filter((car) => {
         return (
-            car.make.toLowerCase().includes(query) ||
-            car.model.toLowerCase().includes(query) ||
-            String(car.year).includes(query) ||
-            car.type.toLowerCase().includes(query) ||
-            car.fuel.toLowerCase().includes(query) ||
-            car.transmission.toLowerCase().includes(query)
+            car.make?.toLowerCase().includes(query) ||
+            car.model?.toLowerCase().includes(query) ||
+            String(car.year || "").includes(query) ||
+            car.type?.toLowerCase().includes(query) ||
+            car.fuel?.toLowerCase().includes(query) ||
+            car.transmission?.toLowerCase().includes(query)
         );
     });
+    // const results = cars_converted.filter((car) => {
+    //     const haystack = [
+    //         car.make,
+    //         car.model,
+    //         car.year,
+    //         car.type,
+    //         car.fuel,
+    //         car.transmission,
+    //     ]
+    //         .filter(Boolean)          // drop undefined/null
+    //         .map(String)              // ensure strings
+    //         .join(" ")                // join with single spaces (no newlines)
+    //         .toLowerCase()
+    //         .replace(/\s+/g, " ");    // normalize any extra whitespace
+
+    //     return haystack.includes(query);
+    // });
+
+
+
+
 
     return NextResponse.json(results);
 }
