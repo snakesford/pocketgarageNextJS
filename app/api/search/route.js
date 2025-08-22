@@ -1,6 +1,29 @@
 import { NextResponse } from "next/server";
 import cars_converted from "@/data/cars_converted.json";
 
+
+
+export async function GET(req) {
+    const { searchParams } = new URL(req.url);
+    const query = searchParams.get("q")?.toLowerCase();
+
+    const results = cars_converted.filter((car) => {
+        return (
+            car.make?.toLowerCase().includes(query) ||
+            car.model?.toLowerCase().includes(query) ||
+            String(car.year || "").includes(query) ||
+            car.type?.toLowerCase().includes(query) ||
+            car.fuel?.toLowerCase().includes(query) ||
+            car.transmission?.toLowerCase().includes(query)
+        );
+    });
+    return NextResponse.json(results);
+}
+
+
+
+
+
 // import { cars } from "@/data/cars";
 /*
 "year":2025,
@@ -24,51 +47,23 @@ import cars_converted from "@/data/cars_converted.json";
     "evMotor":null
     */
 
+// const results = cars_converted.filter((car) => {
+//     const haystack = [
+//         car.make,
+//         car.model,
+//         car.year,
+//         car.type,
+//         car.fuel,
+//         car.transmission,
+//     ]
+//         .filter(Boolean)          // drop undefined/null
+//         .map(String)              // ensure strings
+//         .join(" ")                // join with single spaces (no newlines)
+//         .toLowerCase()
+//         .replace(/\s+/g, " ");    // normalize any extra whitespace
 
-export async function GET(req) {
-    const { searchParams } = new URL(req.url);
-    const query = searchParams.get("q")?.toLowerCase();
-
-    const results = cars_converted.filter((car) => {
-        return (
-            car.make?.toLowerCase().includes(query) ||
-            car.model?.toLowerCase().includes(query) ||
-            String(car.year || "").includes(query) ||
-            car.type?.toLowerCase().includes(query) ||
-            car.fuel?.toLowerCase().includes(query) ||
-            car.transmission?.toLowerCase().includes(query)
-        );
-    });
-    // const results = cars_converted.filter((car) => {
-    //     const haystack = [
-    //         car.make,
-    //         car.model,
-    //         car.year,
-    //         car.type,
-    //         car.fuel,
-    //         car.transmission,
-    //     ]
-    //         .filter(Boolean)          // drop undefined/null
-    //         .map(String)              // ensure strings
-    //         .join(" ")                // join with single spaces (no newlines)
-    //         .toLowerCase()
-    //         .replace(/\s+/g, " ");    // normalize any extra whitespace
-
-    //     return haystack.includes(query);
-    // });
-
-
-
-
-
-    return NextResponse.json(results);
-}
-
-
-
-
-
-
+//     return haystack.includes(query);
+// });
 
 
 // import { NextResponse } from "next/server";
