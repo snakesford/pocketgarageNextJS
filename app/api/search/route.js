@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import cars_converted from "@/data/cars_converted.json";
+import vehiclesSample from "@/data/vehiclesSample.json";
 
 
 
@@ -7,7 +8,7 @@ export async function GET(req) {
     const { searchParams } = new URL(req.url);
     const query = searchParams.get("q")?.toLowerCase();
 
-    const results = cars_converted.filter((car) => {
+    const results = vehiclesSample.filter((car) => {
         return (
             car.make?.toLowerCase().includes(query) ||
             car.model?.toLowerCase().includes(query) ||
