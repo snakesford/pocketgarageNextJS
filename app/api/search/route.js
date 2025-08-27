@@ -1,15 +1,17 @@
+// app/api/search/route.js
 import { NextResponse } from "next/server";
-import cars_converted from "@/data/cars_converted.json";
-import vehiclesSample from "@/data/vehiclesSample.json";
-
-
+import cars_converted from "@/data/vehiclesSample.json";
 
 export async function GET(req) {
     const { searchParams } = new URL(req.url);
-    const query = searchParams.get("q")?.toLowerCase();
+    const query = searchParams.get("q")?.toLowerCase() || "";
+    const limit = parseInt(searchParams.get("limit") || "100", 10);
+    const offset = parseInt(searchParams.get("offset") || "0", 10);
 
-    const results = vehiclesSample.filter((car) => {
-        return (
+    let results = cars_converted;
+
+    if (query) {
+        results = results.filter((car) =>
             car.make?.toLowerCase().includes(query) ||
             car.model?.toLowerCase().includes(query) ||
             String(car.year || "").includes(query) ||
@@ -17,9 +19,61 @@ export async function GET(req) {
             car.fuel?.toLowerCase().includes(query) ||
             car.transmission?.toLowerCase().includes(query)
         );
+    }
+
+    // Apply pagination (just slice out what we need)
+    const paginated = results.slice(offset, offset + limit);
+
+    return NextResponse.json({
+        results: paginated,
+        total: results.length, // so frontend knows how many exist
     });
-    return NextResponse.json(results);
 }
+
+// import { NextResponse } from "next/server";
+// import vehiclesSample from "@/data/vehiclesSample.json";
+
+
+// export async function GET(req) {
+//     const { searchParams } = new URL(req.url);
+//     const query = searchParams.get("q")?.toLowerCase();
+//     const limit = parseInt(searchParams.get("limit") || "100", 10);
+//     const offset = parseInt(searchParams.get("offset") || "0", 10);
+//     if (query) {
+//         results = vehiclesSample.filter((car) => {
+//             car.make?.toLowerCase().includes(query) ||
+//                 car.model?.toLowerCase().includes(query) ||
+//                 String(car.year || "").includes(query) ||
+//                 car.type?.toLowerCase().includes(query) ||
+//                 car.fuel?.toLowerCase().includes(query) ||
+//                 car.transmission?.toLowerCase().includes(query)
+//         });
+//     }
+//     return NextResponse.json(results);
+// }
+
+// import { NextResponse } from "next/server";
+// import cars_converted from "@/data/cars_converted.json";
+// import vehiclesSample from "@/data/vehiclesSample.json";
+
+
+
+// export async function GET(req) {
+//     const { searchParams } = new URL(req.url);
+//     const query = searchParams.get("q")?.toLowerCase();
+
+//     const results = vehiclesSample.filter((car) => {
+//         return (
+//             car.make?.toLowerCase().includes(query) ||
+//             car.model?.toLowerCase().includes(query) ||
+//             String(car.year || "").includes(query) ||
+//             car.type?.toLowerCase().includes(query) ||
+//             car.fuel?.toLowerCase().includes(query) ||
+//             car.transmission?.toLowerCase().includes(query)
+//         );
+//     });
+//     return NextResponse.json(results);
+// }
 
 
 // Multi-search 
